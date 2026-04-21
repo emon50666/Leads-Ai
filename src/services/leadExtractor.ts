@@ -2,7 +2,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { v4 as uuidv4 } from "uuid";
 
 // Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({
+  apiKey: "AIzaSyBTHCRxeKfm4gP68hYJdFWmU5jy7Riah4c"
+});
 
 export interface ExtractedLead {
   id: string;

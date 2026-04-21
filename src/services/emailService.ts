@@ -1,6 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({
+  apiKey: "AIzaSyBTHCRxeKfm4gP68hYJdFWmU5jy7Riah4c"
+});
 
 export async function generatePersonalizedEmail(lead: any): Promise<string> {
   try {
