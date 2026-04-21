@@ -1,0 +1,70 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredLeadFields() {
+      return request.resource.data.keys().hasAll(['userId', 'businessName', 'createdAt']);
+    }
+
+    function isValidLead(userId) {
+      let data = request.resource.data;
+      return hasRequiredLeadFields() &&
+             data.userId == userId &&
+             data.businessName is string && data.businessName.size() > 0 && data.businessName.size() < 200 &&
+             (!('category' in data) || (data.category is string && data.category.size() < 100)) &&
+             (!('address' in data) || (data.address is string && data.address.size() < 500)) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() < 50)) &&
+             (!('email' in data) || (data.email is string && data.email.size() < 100)) &&
+             (!('website' in data) || (data.website is string && data.website.size() < 500)) &&
+             (!('rating' in data) || data.rating is number) &&
+             (!('profileLink' in data) || (data.profileLink is string && data.profileLink.size() < 1000)) &&
+             (!('searchQuery' in data) || (data.searchQuery is string && data.searchQuery.size() < 500)) &&
+             (!('searchId' in data) || (data.searchId is string && data.searchId.size() < 100)) &&
+             (!('facebook' in data) || (data.facebook is string && data.facebook.size() < 1000)) &&
+             (!('instagram' in data) || (data.instagram is string && data.instagram.size() < 1000)) &&
+             (!('linkedin' in data) || (data.linkedin is string && data.linkedin.size() < 1000)) &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidSettings() {
+      let data = request.resource.data;
+      return (!('googleSheetUrl' in data) || (data.googleSheetUrl is string && data.googleSheetUrl.size() < 1000)) &&
+             (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      // Allow users to read and write their own base document
+      allow read, write: if isOwner(userId);
+      
+      match /leads/{leadId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidLead(userId);
+        allow update: if isOwner(userId) && isValidLead(userId) && request.resource.data.createdAt == resource.data.createdAt;
+        allow delete: if isOwner(userId);
+      }
+
+      match /settings/integration {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidSettings();
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "entities": {
+    "Lead": {
+      "title": "Lead",
+      "description": "A business lead extracted from Google Maps.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who extracted the lead."
+        },
+        "businessName": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "number"
+        },
+        "profileLink": {
+          "type": "string"
+        },
+        "searchQuery": {
+          "type": "string"
+        },
+        "searchId": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "string"
+        },
+        "instagram": {
+          "type": "string"
+        },
+        "linkedin": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "businessName", "createdAt"]
+    },
+    "UserSettings": {
+      "title": "User Settings",
+      "description": "Settings for a specific user, such as Google Sheets integration.",
+      "type": "object",
+      "properties": {
+        "googleSheetUrl": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}/leads/{leadId}": {
+      "schema": {
+        "$ref": "#/entities/Lead"
+      },
+      "description": "Leads collected by a specific user."
+    },
+    "/users/{userId}/settings/integration": {
+      "schema": {
+        "$ref": "#/entities/UserSettings"
+      },
+      "description": "Integration settings for a specific user."
+    }
+  }
+}
