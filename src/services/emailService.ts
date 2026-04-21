@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({
-  apiKey: "AIzaSyBTHCRxeKfm4gP68hYJdFWmU5jy7Riah4c"
+  apiKey: "AIzaSyBBgUQwrKKpwpNfbYu3k2n3P9q__ybKL8E"
 });
 
 export async function generatePersonalizedEmail(lead: any): Promise<string> {

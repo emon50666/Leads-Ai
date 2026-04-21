@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 // Initialize Gemini
 const ai = new GoogleGenAI({
-  apiKey: "AIzaSyBTHCRxeKfm4gP68hYJdFWmU5jy7Riah4c"
+  apiKey: "AIzaSyBBgUQwrKKpwpNfbYu3k2n3P9q__ybKL8E"
 });
 
 export interface ExtractedLead {
